@@ -3,6 +3,7 @@
 #include <string>
 #include <sstream>
 #include <math.h>
+#include <iomanip>
 #define PI 3.14159265
 int main()
 {
@@ -54,15 +55,25 @@ int main()
         exit(-1);
         }
 
-    for (int loop = 0; loop < sizeof(x); loop++)
-    {
+    // creating new file
+    std::ofstream arquivo_out ("roll_and_pitch_angles.txt");
+
+    if (arquivo_out.is_open())
+        {
+        arquivo_out << "Stamp\tRoll\tPitch\n";
+        }
+    for (unsigned int loop = 0; loop < sizeof(x); loop++)
+        {
 
         roll[loop]= (atan2(y[loop],x[loop]))*180/PI;
         pitch[loop]=(atan2((-x[loop]),sqrt(pow(y[loop],2)+pow(z[loop],2))))*180/PI;
-        std::cout << roll[loop]<<"\t";
-        std::cout << pitch[loop]<<"\n";
+        arquivo_out << time_stamp[loop]<<"\t";
+        arquivo_out << std::fixed << std::setprecision(2)<<roll[loop]<<"\t";
+        arquivo_out << std::fixed << std::setprecision(2)<<pitch[loop]<<"\n";
 
-    }
+        }
+    arquivo_out.close();
+
 
     return 0;
 }
